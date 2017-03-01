@@ -9,10 +9,55 @@ use App\Tweet;
 
 class TweetController extends Controller
 {
+    public function update(Request $request, $tweetID)
+    {
+        $tweet = Tweet::find($tweetID);
+
+//        dd($tweets);
+        $validation = Validator::make($request->all()
+            /*[
+                'tweet' => request('tweet'),
+            ]*/, [
+                'tweet' => 'required|max:140',
+            ]);
+
+        if($validation->passes())
+        {
+
+            $tweet->tweet = request('tweet');
+            $tweet->save();
+//            DB::table('tweets')->insert([
+//
+//            ]);
+
+            return redirect("/")
+                ->with('successStatus', 'Tweet successfully updated!');
+        } else{
+
+            return redirect("/tweets/$tweetID/edit")
+                ->withInput()
+                ->withErrors($validation);
+        }
+
+    }
+    public function edit($tweetID)
+    {
+        $tweets = Tweet::where('id', '=', $tweetID)->get();
+        return view('tweets.edit', [
+            'tweets' => $tweets
+        ]);
+    }
+
     public function viewID($tweetID)
     {
-        return Tweet::find($tweetID);
-//        $tweets = Tweet::with("$tweetID")->get();
+    //    return Tweet::find($tweetID);
+     //   Tweet::with('tweet')->get();
+        $tweets = Tweet::where('id', '=', $tweetID)->get();
+
+
+
+
+     //   dd($tweets);
 //   // $tweets = Tweet::find($tweetID);
 //        $tweets = DB::table('tweets')
 //            ->select('id', 'tweet')
@@ -21,9 +66,9 @@ class TweetController extends Controller
 
 
 //
-//        return view('tweets.viewID', [
-//            'tweets' => $tweets
-//        ]);
+       return view('tweets.viewID', [
+          'tweets' => $tweets
+        ]);
 
     }
 
@@ -51,10 +96,12 @@ class TweetController extends Controller
 
         if($validation->passes())
         {
-            DB::table('tweets')->insert([
-                'tweet'=> request('tweet'),
-//            'id' => request('tweet'),
-            ]);
+            $tweet = new Tweet();
+              $tweet->tweet = request('tweet');
+            $tweet->save();
+//            DB::table('tweets')->insert([
+//
+//            ]);
 
             return redirect('/')
 
@@ -71,7 +118,7 @@ class TweetController extends Controller
 
     public function index()
     {
-        $tweets = Tweet::orderBy('tweet')->get();
+        $tweets = Tweet::orderBy('id','desc')->get();
 //
    //     $tweets = DB::table('tweets')
 //            ->select('id', 'tweet')

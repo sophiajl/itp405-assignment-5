@@ -25,13 +25,20 @@
                 </tr>
 
             </tbody>
-            @endforeach
 
         </table>
+
+        <a href="/tweets/{{ $tweet->id }}/edit">
+            <button type="button" class="btn btn-link">
+                Edit
+            </button>
+        </a>
+
 
         <a href="/" class="btn">Return</a>
 
     </div>
+    @endforeach
 
 </body>
 </html>
