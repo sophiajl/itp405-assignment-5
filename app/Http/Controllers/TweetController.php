@@ -5,27 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Validator;
+use App\Tweet;
 
 class TweetController extends Controller
 {
     public function viewID($tweetID)
     {
-        $tweets = DB::table('tweets')
-            ->select('id', 'tweet')
-            ->where('id', '=', $tweetID)
-            ->get();
+        return Tweet::find($tweetID);
+//        $tweets = Tweet::with("$tweetID")->get();
+//   // $tweets = Tweet::find($tweetID);
+//        $tweets = DB::table('tweets')
+//            ->select('id', 'tweet')
+//            ->where('id', '=', $tweetID)
+//            ->get();
 
-        return view('tweets.viewID', [
-            'tweets' => $tweets
-        ]);
+
+//
+//        return view('tweets.viewID', [
+//            'tweets' => $tweets
+//        ]);
 
     }
 
     public function destroy($tweetID)
     {
-        DB::table('tweets')
-            ->where('id', '=', $tweetID)
-            ->delete();
+
+    $tweet = Tweet::find($tweetID);
+    $tweet->delete();
+
+//        DB::table('tweets')
+//            ->where('id', '=', $tweetID)
+//            ->delete();
         return redirect('/')
             ->with('successStatus', 'Tweet successfully deleted!');
     }
@@ -61,10 +71,12 @@ class TweetController extends Controller
 
     public function index()
     {
-        $tweets = DB::table('tweets')
-            ->select('id', 'tweet')
-            ->orderBy('id', 'desc')
-            ->get();
+        $tweets = Tweet::orderBy('tweet')->get();
+//
+   //     $tweets = DB::table('tweets')
+//            ->select('id', 'tweet')
+//            ->orderBy('id', 'desc')
+//            ->get();
 
 
         return view('tweets.index', [
