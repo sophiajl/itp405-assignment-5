@@ -47,10 +47,12 @@ class TweetController extends Controller
             ]);
 
             return redirect('/')
+
                 ->with('successStatus', 'Tweet successfully created!');
         } else{
 
             return redirect('/')
+                ->withInput()
                 ->withErrors($validation);
         }
 

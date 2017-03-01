@@ -32,7 +32,7 @@
         {{ csrf_field() }}
         <div class="form-group">
 
-            <textarea id="tweet" class="text" cols="50" rows ="10" name="tweet"></textarea>
+            <input type="text" id="tweet" cols="50" rows ="10" name="tweet" value="{{ old('tweet') }}">
 
         </div>
 
